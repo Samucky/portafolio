@@ -164,15 +164,15 @@
       <button type="submit" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-full font-semibold transition">Enviar</button>
     </form>
   </section>
-
+  
   <script>
     document.getElementById('contact-form').addEventListener('submit', function(event) {
       event.preventDefault();
-
+  
       const nombre = document.getElementById('nombre').value.trim();
       const correo = document.getElementById('correo').value.trim();
       const mensaje = document.getElementById('mensaje').value.trim();
-
+  
       // Validación básica
       if (!nombre || !correo || !mensaje) {
         Swal.fire({
@@ -184,7 +184,7 @@
         });
         return;
       }
-
+  
       // Envío de datos al backend
       fetch('https://api-repository-7tpi.onrender.com/enviar-correo', {
         method: 'POST',
@@ -194,13 +194,13 @@
         body: JSON.stringify({ nombre, correo, mensaje }),
       })
       .then(response => {
-        if (!response.ok) throw new Error('Error en la respuesta');
-        return response.text(); // o .json() si el backend lo devuelve como JSON
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+        return response.text(); // texto plano porque el backend no devuelve JSON
       })
       .then(data => {
         Swal.fire({
           title: '¡Mensaje enviado!',
-          text: 'Gracias por contactarme, te responderé pronto.',
+          text: data || 'Gracias por contactarme, te responderé pronto.',
           icon: 'success',
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#8b5cf6'
@@ -208,6 +208,7 @@
         document.getElementById('contact-form').reset();
       })
       .catch(error => {
+        console.error('Error al enviar:', error);
         Swal.fire({
           title: 'Error',
           text: 'Hubo un problema al enviar tu mensaje. Inténtalo más tarde.',
@@ -218,6 +219,7 @@
       });
     });
   </script>
+  
 
   <!-- Footer -->
 
